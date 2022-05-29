@@ -19,12 +19,13 @@ class PictureOfTheDayViewModel (
         return liveData
     }
 
-    fun sendRequest() {
+    fun sendRequest(date: String) {
         liveData.postValue(PictureOfTheDayAppState.Loading(null))
         // TODO HW а есть ли вообще BuildConfig.NASA_API_KEY
-        pictureOfTheDayRetrofitImpl.getRetrofit().getPictureOfTheDay(BuildConfig.NASA_API_KEY)
+        pictureOfTheDayRetrofitImpl.getRetrofit().getPictureOfTheDay(date, BuildConfig.NASA_API_KEY)
             .enqueue(callback)
     }
+
 
     private val callback = object : Callback<PictureOfTheDayResponseData> {
         override fun onResponse(
