@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">NasaPhotoViewerSD</string>
+
+    <string name="photo_of_the_day_stub" translatable="false">Photo of the day</string>
+    <string name="search_wiki" translatable="false">Найти в Википедии</string>
+    <string name="wiki_helper_text" translatable="false">Поищите термин в википедии</string>
+    <string name="favourite" translatable="false">favourite</string>
+    <string name="settings" translatable="false">settings</string>
+    <string name="search" translatable="false">Search</string>
+    <string name="today">Сегодня</string>
+    <string name="yesterday">Вчера</string>
+    <string name="tdby">Позавчера</string>
 </resources>
