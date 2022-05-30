@@ -1,28 +1,23 @@
 package com.sardavisgeekbrains.nasaphotoviewersd.view.picture
 
 import android.content.Intent
-import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.chip.Chip
 import com.sardavisgeekbrains.nasaphotoviewersd.R
 import com.sardavisgeekbrains.nasaphotoviewersd.databinding.FragmentPictureOfTheDayBinding
+import com.sardavisgeekbrains.nasaphotoviewersd.view.settings.SettingsFragment
 import com.sardavisgeekbrains.nasaphotoviewersd.viewmodel.PictureOfTheDayAppState
 import com.sardavisgeekbrains.nasaphotoviewersd.viewmodel.PictureOfTheDayViewModel
-import java.lang.String.format
 import java.time.LocalDate
-import java.time.Period
 import java.time.format.DateTimeFormatter
 
 class PictureOfTheDayFragment : Fragment() {
@@ -56,6 +51,30 @@ class PictureOfTheDayFragment : Fragment() {
 
     private val viewModel: PictureOfTheDayViewModel by lazy {
         ViewModelProvider(this).get(PictureOfTheDayViewModel::class.java)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.main_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_settings -> {
+                openFragment(SettingsFragment.newInstance())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun openFragment(fragment: Fragment) {
+        requireActivity().supportFragmentManager.apply {
+            beginTransaction()
+                .replace(R.id.container, fragment)
+                .addToBackStack("")
+                .commitAllowingStateLoss()
+        }
     }
 
 
@@ -99,6 +118,8 @@ class PictureOfTheDayFragment : Fragment() {
             }
 
         })
+
+        setHasOptionsMenu(true)
 
 
 
