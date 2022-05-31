@@ -22,8 +22,6 @@ import java.time.format.DateTimeFormatter
 
 class PictureOfTheDayFragment : Fragment() {
 
-
-    var isMain = true
     private var _binding: FragmentPictureOfTheDayBinding? = null
     private val binding: FragmentPictureOfTheDayBinding
         get() = _binding!!
@@ -71,7 +69,7 @@ class PictureOfTheDayFragment : Fragment() {
     private fun openFragment(fragment: Fragment) {
         requireActivity().supportFragmentManager.apply {
             beginTransaction()
-                .replace(R.id.container, fragment)
+                .add(R.id.container, fragment)
                 .addToBackStack("")
                 .commitAllowingStateLoss()
         }

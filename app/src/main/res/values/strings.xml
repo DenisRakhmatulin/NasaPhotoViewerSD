@@ -10,4 +10,8 @@
     <string name="today">Сегодня</string>
     <string name="yesterday">Вчера</string>
     <string name="tdby">Позавчера</string>
+    <string name="_1">Красное</string>
+    <string name="_2">Зеленое</string>
+    <string name="_3">Синее</string>
+    <string name="night_mode_btn_text">Night mode on/off</string>
 </resources>
