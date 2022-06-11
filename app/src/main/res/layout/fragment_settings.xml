@@ -30,11 +30,13 @@
             android:text="@string/_3" />
     </com.google.android.material.tabs.TabLayout>
 
-    <com.google.android.material.button.MaterialButton
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/nightModeBtn"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/night_mode_btn_text"
-        />
+        android:textColor="?themeBaseColor"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.chip.Chip
 import com.sardavisgeekbrains.nasaphotoviewersd.R
 import com.sardavisgeekbrains.nasaphotoviewersd.databinding.FragmentPictureOfTheDayBinding
 import com.sardavisgeekbrains.nasaphotoviewersd.view.settings.SettingsFragment
@@ -122,14 +123,16 @@ class PictureOfTheDayFragment : Fragment() {
 
 
         binding.chipGroup.setOnCheckedChangeListener { group, position ->
-            when (position) {
-                1 -> {
+            val chip = group.findViewById<Chip>(position)
+            val tag = chip.tag
+            when (tag) {
+                "chip1" -> {
                     viewModel.sendRequest(today.toString())
                 }
-                2 -> {
+                "chip2" -> {
                     viewModel.sendRequest(yesterday.toString())
                 }
-                3 -> {
+                "chip3" -> {
                     viewModel.sendRequest(tdby.toString())
                 }
             }
@@ -141,7 +144,9 @@ class PictureOfTheDayFragment : Fragment() {
 
     private fun renderData(pictureOfTheDayAppState: PictureOfTheDayAppState) {
         when (pictureOfTheDayAppState) {
-            is PictureOfTheDayAppState.Error -> {}
+            is PictureOfTheDayAppState.Error -> {
+                pictureOfTheDayAppState.error.printStackTrace()
+            }
             is PictureOfTheDayAppState.Loading -> {}
             is PictureOfTheDayAppState.Success -> {
                 binding.imageView.load(pictureOfTheDayAppState.pictureOfTheDayResponseData.url) {
