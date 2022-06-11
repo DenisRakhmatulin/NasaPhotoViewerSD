@@ -10,7 +10,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PictureOfTheDayViewModel (
+class PictureOfTheDayViewModel(
     private val liveData: MutableLiveData<PictureOfTheDayAppState> = MutableLiveData(),
     private val pictureOfTheDayRetrofitImpl: PictureOfTheDayRetrofitImpl = PictureOfTheDayRetrofitImpl()
 ) : ViewModel() {
@@ -21,9 +21,15 @@ class PictureOfTheDayViewModel (
 
     fun sendRequest(date: String) {
         liveData.postValue(PictureOfTheDayAppState.Loading(null))
-        // TODO HW а есть ли вообще BuildConfig.NASA_API_KEY
-        pictureOfTheDayRetrofitImpl.getRetrofit().getPictureOfTheDay(date, BuildConfig.NASA_API_KEY)
-            .enqueue(callback)
+
+        try {
+            pictureOfTheDayRetrofitImpl.getRetrofit()
+                .getPictureOfTheDay(date, BuildConfig.NASA_API_KEY)
+                .enqueue(callback)
+        } catch (e: Throwable) {
+            liveData.postValue(PictureOfTheDayAppState.Error(throw IllegalStateException("где-то потерялся ключ, свяжитесь с нами")))
+        }
+
     }
 
 
