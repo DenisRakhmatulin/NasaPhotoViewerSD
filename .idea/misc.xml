@@ -4,17 +4,24 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/drawable-v24/ic_archive.xml" value="0.221" />
+        <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/drawable-v24/ic_earth.xml" value="0.221" />
         <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.221" />
+        <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/drawable-v24/ic_mars.xml" value="0.221" />
         <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/drawable-v24/ic_no_photo_vector.xml" value="0.221" />
         <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/drawable-v24/ic_send.xml" value="0.221" />
         <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/drawable-v24/ic_wikipedia.xml" value="0.221" />
+        <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/drawable-v24/progress_animation.xml" value="0.221" />
         <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/drawable/ic_launcher_background.xml" value="0.221" />
         <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/drawable/ic_settings.xml" value="0.221" />
         <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/layout/activity_main.xml" value="0.1388888888888889" />
         <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/layout/bottom_sheet_layout.xml" value="0.13333333333333333" />
+        <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/layout/fragment_api.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/layout/fragment_mars.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/layout/fragment_navigation.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/layout/fragment_picture_of_the_day.xml" value="0.33" />
         <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/layout/fragment_settings.xml" value="0.33" />
         <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/menu/main_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Sar/AndroidStudioProjects/NasaPhotoViewerSD/app/src/main/res/menu/menu_bottom_navigation.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>

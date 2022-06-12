@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.sardavisgeekbrains.nasaphotoviewersd.R
 import com.sardavisgeekbrains.nasaphotoviewersd.databinding.FragmentNavigationBinding
+import com.sardavisgeekbrains.nasaphotoviewersd.view.picture.ApiFragment
 import com.sardavisgeekbrains.nasaphotoviewersd.view.picture.MarsFragment
 import com.sardavisgeekbrains.nasaphotoviewersd.view.picture.PictureOfTheDayFragment
 
@@ -39,7 +40,7 @@ class NavigationFragment : Fragment() {
         binding.navigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.action_earth -> navigation.showFragment(PictureOfTheDayFragment.newInstance(),false)
-                R.id.action_mars -> navigation.showFragment(MarsFragment.newInstance(),false)
+                R.id.action_mars -> navigation.showFragment(ApiFragment.newInstance(),false)
             }
             true
         }
