@@ -4,14 +4,14 @@
 
     <item
         android:id="@+id/action_earth"
-        android:icon="@drawable/ic_earth"
-        android:title="Earth"
+        android:icon="@drawable/ic_photo_24"
+        android:title="@string/photo_of_the_day_menu_text"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_mars"
-        android:icon="@drawable/ic_mars"
-        android:title="Mars"
+        android:icon="@drawable/ic_system"
+        android:title="@string/planets_today_menu_text"
         app:showAsAction="always" />
 
 </menu>

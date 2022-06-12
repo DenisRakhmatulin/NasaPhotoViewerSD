@@ -8,18 +8,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import coil.load
 import com.google.android.material.snackbar.Snackbar
+import com.sardavisgeekbrains.nasaphotoviewersd.BuildConfig
 import com.sardavisgeekbrains.nasaphotoviewersd.R
-import com.sardavisgeekbrains.nasaphotoviewersd.databinding.FragmentMarsBinding
+import com.sardavisgeekbrains.nasaphotoviewersd.databinding.FragmentEarthEpicBinding
 import com.sardavisgeekbrains.nasaphotoviewersd.view.settings.SettingsFragment
 import com.sardavisgeekbrains.nasaphotoviewersd.viewmodel.PictureOfTheDayAppState
 import com.sardavisgeekbrains.nasaphotoviewersd.viewmodel.PictureOfTheDayViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class MarsFragment : Fragment() {
+class EarthEpicFragment : Fragment() {
 
-    private var _binding: FragmentMarsBinding? = null
-    private val binding: FragmentMarsBinding
+    private var _binding: FragmentEarthEpicBinding? = null
+    private val binding: FragmentEarthEpicBinding
         get() {
             return _binding!!
         }
@@ -33,6 +34,9 @@ class MarsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     var tdby = today.minusDays(2).format(formatter)
 
+    var i: Long = 3
+    var dateActual = tdby
+
     private val viewModel: PictureOfTheDayViewModel by lazy {
         ViewModelProvider(this).get(PictureOfTheDayViewModel::class.java)
     }
@@ -43,7 +47,7 @@ class MarsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMarsBinding.inflate(inflater)
+        _binding = FragmentEarthEpicBinding.inflate(inflater)
         return binding.root
     }
 
@@ -75,13 +79,15 @@ class MarsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getLiveData().observe(viewLifecycleOwner, { render(it) })
-        viewModel.sendMarsRequest(tdby.toString())
+
+        viewModel.getEpic()
 
         setHasOptionsMenu(true)
 
     }
 
     private fun render(appState: PictureOfTheDayAppState) {
+
         when (appState) {
             is PictureOfTheDayAppState.Error -> {
                 binding.loadingImageView.visibility = View.GONE
@@ -91,17 +97,15 @@ class MarsFragment : Fragment() {
                 binding.loadingImageView.visibility = View.VISIBLE
                 binding.loadingImageView.load(R.drawable.progress_animation)
             }
-            is PictureOfTheDayAppState.SuccessMars -> {
-                if (appState.serverResponseData.photos.isEmpty()) {
-                    Snackbar.make(
-                        binding.root,
-                        "В этот день curiosity не сделал ни одного снимка",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                } else {
-                    val url = appState.serverResponseData.photos.first().imgSrc
-                    binding.loadingImageView.load(url)
-                }
+            is PictureOfTheDayAppState.SuccessEarthEpic -> {
+                val strDate = appState.serverResponseData.last().date.split(" ").first()
+                val image = appState.serverResponseData.last().image
+                val url = "https://api.nasa.gov/EPIC/archive/natural/" +
+                        strDate.replace("-", "/", true) +
+                        "/png/" +
+                        "$image" +
+                        ".png?api_key=${BuildConfig.NASA_API_KEY}"
+                binding.loadingImageView.load(url)
 
             }
         }
@@ -109,8 +113,8 @@ class MarsFragment : Fragment() {
 
 
     companion object {
-        fun newInstance(): MarsFragment {
-            return MarsFragment()
+        fun newInstance(): EarthEpicFragment {
+            return EarthEpicFragment()
         }
     }
 

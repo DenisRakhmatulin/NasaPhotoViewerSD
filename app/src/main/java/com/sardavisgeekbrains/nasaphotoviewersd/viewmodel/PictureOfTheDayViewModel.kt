@@ -1,9 +1,9 @@
 package com.sardavisgeekbrains.nasaphotoviewersd.viewmodel
 
-import android.os.Build
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.nasaapp.model.data.EarthEpicServerResponseData
 import com.sardavisgeekbrains.nasaphotoviewersd.BuildConfig
 import com.sardavisgeekbrains.nasaphotoviewersd.repository.MarsPhotosServerResponseData
 import com.sardavisgeekbrains.nasaphotoviewersd.repository.PictureOfTheDayResponseData
@@ -11,10 +11,6 @@ import com.sardavisgeekbrains.nasaphotoviewersd.repository.PictureOfTheDayRetrof
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class PictureOfTheDayViewModel(
     private val liveData: MutableLiveData<PictureOfTheDayAppState> = MutableLiveData(),
@@ -44,6 +40,18 @@ class PictureOfTheDayViewModel(
             pictureOfTheDayRetrofitImpl.getMarsPictureByDate()
                 .getMarsImageByDate(date, BuildConfig.NASA_API_KEY)
                 .enqueue(marsCallback)
+        } catch (e: Throwable) {
+            liveData.postValue(PictureOfTheDayAppState.Error(throw IllegalStateException(API_ERROR)))
+        }
+
+    }
+
+    fun getEpic() {
+        liveData.postValue(PictureOfTheDayAppState.Loading(null))
+        try {
+            pictureOfTheDayRetrofitImpl.getEPIC()
+                .getEPIC(BuildConfig.NASA_API_KEY)
+                .enqueue(epicCallback)
         } catch (e: Throwable) {
             liveData.postValue(PictureOfTheDayAppState.Error(throw IllegalStateException(API_ERROR)))
         }
@@ -97,6 +105,29 @@ class PictureOfTheDayViewModel(
         }
     }
 
+
+    private val epicCallback = object : Callback<List<EarthEpicServerResponseData>> {
+
+        override fun onResponse(
+            call: Call<List<EarthEpicServerResponseData>>,
+            response: Response<List<EarthEpicServerResponseData>>,
+        ) {
+            if (response.isSuccessful && response.body() != null) {
+                liveData.postValue(PictureOfTheDayAppState.SuccessEarthEpic(response.body()!!))
+            } else {
+                val message = response.message()
+                if (message.isNullOrEmpty()) {
+                    liveData.postValue(PictureOfTheDayAppState.Error(Throwable(UNKNOWN_ERROR)))
+                } else {
+                    liveData.postValue(PictureOfTheDayAppState.Error(Throwable(message)))
+                }
+            }
+        }
+
+        override fun onFailure(call: Call<List<EarthEpicServerResponseData>>, t: Throwable) {
+            liveData.postValue(PictureOfTheDayAppState.Error(t))
+        }
+    }
 
 
     /*fun getDayBeforeYesterday(): String {

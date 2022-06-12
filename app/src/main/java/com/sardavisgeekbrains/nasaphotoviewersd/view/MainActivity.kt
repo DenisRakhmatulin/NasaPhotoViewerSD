@@ -21,10 +21,9 @@ class MainActivity : AppCompatActivity() {
         setTheme(getRealStyle(getCurrentTheme()))
         setContentView(R.layout.activity_main)
 
-        if(savedInstanceState==null){
-
+        if (savedInstanceState == null) {
             navigation.showNavigationFragment(NavigationFragment.newInstance())
-            navigation.showFragment(PictureOfTheDayFragment.newInstance(), true)
+            navigation.showFragment(PictureOfTheDayFragment.newInstance(), false)
         }
     }
 

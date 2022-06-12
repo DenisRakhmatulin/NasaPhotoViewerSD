@@ -146,7 +146,11 @@ class PictureOfTheDayFragment : Fragment() {
     private fun renderData(pictureOfTheDayAppState: PictureOfTheDayAppState) {
         when (pictureOfTheDayAppState) {
             is PictureOfTheDayAppState.Error -> {
-                Snackbar.make(binding.root,pictureOfTheDayAppState.error.toString(), Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.root,
+                    pictureOfTheDayAppState.error.toString(),
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
             is PictureOfTheDayAppState.Loading -> {}
             is PictureOfTheDayAppState.Success -> {

@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import com.sardavisgeekbrains.nasaphotoviewersd.R
 import com.sardavisgeekbrains.nasaphotoviewersd.databinding.FragmentNavigationBinding
 import com.sardavisgeekbrains.nasaphotoviewersd.view.picture.ApiFragment
-import com.sardavisgeekbrains.nasaphotoviewersd.view.picture.MarsFragment
 import com.sardavisgeekbrains.nasaphotoviewersd.view.picture.PictureOfTheDayFragment
 
 class NavigationFragment : Fragment() {
@@ -39,14 +38,18 @@ class NavigationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.navigationView.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.action_earth -> navigation.showFragment(PictureOfTheDayFragment.newInstance(),false)
-                R.id.action_mars -> navigation.showFragment(ApiFragment.newInstance(),false)
+                R.id.action_earth -> navigation.showFragment(
+                    PictureOfTheDayFragment.newInstance(),
+                    false
+                )
+                R.id.action_mars -> navigation.showFragment(ApiFragment.newInstance(), false)
             }
             true
         }
         binding.navigationView.selectedItemId = R.id.action_earth;
     }
-    companion object{
+
+    companion object {
         fun newInstance(): NavigationFragment {
             return NavigationFragment()
         }
