@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
 import com.sardavisgeekbrains.nasaphotoviewersd.R
 import com.sardavisgeekbrains.nasaphotoviewersd.databinding.FragmentPictureOfTheDayBinding
 import com.sardavisgeekbrains.nasaphotoviewersd.view.settings.SettingsFragment
@@ -70,7 +71,7 @@ class PictureOfTheDayFragment : Fragment() {
     private fun openFragment(fragment: Fragment) {
         requireActivity().supportFragmentManager.apply {
             beginTransaction()
-                .add(R.id.container, fragment)
+                .add(R.id.contentContainer, fragment)
                 .addToBackStack("")
                 .commitAllowingStateLoss()
         }
@@ -145,7 +146,7 @@ class PictureOfTheDayFragment : Fragment() {
     private fun renderData(pictureOfTheDayAppState: PictureOfTheDayAppState) {
         when (pictureOfTheDayAppState) {
             is PictureOfTheDayAppState.Error -> {
-                pictureOfTheDayAppState.error.printStackTrace()
+                Snackbar.make(binding.root,pictureOfTheDayAppState.error.toString(), Snackbar.LENGTH_SHORT).show()
             }
             is PictureOfTheDayAppState.Loading -> {}
             is PictureOfTheDayAppState.Success -> {

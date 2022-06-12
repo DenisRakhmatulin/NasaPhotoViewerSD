@@ -2,7 +2,9 @@ package com.sardavisgeekbrains.nasaphotoviewersd.view.settings
 
 import android.content.Context
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayout
@@ -13,8 +15,6 @@ import com.sardavisgeekbrains.nasaphotoviewersd.view.ThemeSecond
 import com.sardavisgeekbrains.nasaphotoviewersd.view.ThemeThird
 
 class SettingsFragment : Fragment() {
-
-    /*var nightIsOn = false*/
 
     private lateinit var parentActivity: MainActivity
     override fun onAttach(context: Context) {
@@ -41,12 +41,6 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-       /* binding.nightModeBtn.setOnClickListener(View.OnClickListener {
-            when (nightIsOn){
-            true->{AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)}
-            false->{AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)}}
-            nightIsOn = !nightIsOn
-        })*/
         binding.nightModeBtn.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked){
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

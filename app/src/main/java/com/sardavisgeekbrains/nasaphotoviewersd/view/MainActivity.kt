@@ -1,7 +1,7 @@
 package com.sardavisgeekbrains.nasaphotoviewersd.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.sardavisgeekbrains.nasaphotoviewersd.R
 import com.sardavisgeekbrains.nasaphotoviewersd.view.picture.PictureOfTheDayFragment
 
@@ -14,16 +14,24 @@ class MainActivity : AppCompatActivity() {
     private val KEY_SP = "sp"
     private val KEY_CURRENT_THEME = "current_theme"
 
+    lateinit var navigation: Navigation
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(getRealStyle(getCurrentTheme()))
+        navigation = Navigation(supportFragmentManager)
         setContentView(R.layout.activity_main)
 
         if(savedInstanceState==null){
-            supportFragmentManager.beginTransaction().replace(R.id.container,
-                PictureOfTheDayFragment.newInstance()).commit()
+            navigation = Navigation(supportFragmentManager)
+            navigation.showNavigationFragment(NavigationFragment.newInstance())
+            navigation.showFragment(PictureOfTheDayFragment.newInstance(), true)
         }
     }
+
+
+
+
 
     fun setCurrentTheme(currentTheme: Int) {
         val sharedPreferences = getSharedPreferences(KEY_SP, MODE_PRIVATE)
