@@ -2,9 +2,7 @@ package com.sardavisgeekbrains.nasaphotoviewersd.view.picture
 
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -12,6 +10,7 @@ import coil.load
 import com.google.android.material.snackbar.Snackbar
 import com.sardavisgeekbrains.nasaphotoviewersd.R
 import com.sardavisgeekbrains.nasaphotoviewersd.databinding.FragmentMarsBinding
+import com.sardavisgeekbrains.nasaphotoviewersd.view.settings.SettingsFragment
 import com.sardavisgeekbrains.nasaphotoviewersd.viewmodel.PictureOfTheDayAppState
 import com.sardavisgeekbrains.nasaphotoviewersd.viewmodel.PictureOfTheDayViewModel
 import java.time.LocalDate
@@ -48,10 +47,38 @@ class MarsFragment : Fragment() {
             return binding.root
         }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.main_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_settings -> {
+                openFragment(SettingsFragment.newInstance())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun openFragment(fragment: Fragment) {
+        requireActivity().supportFragmentManager.apply {
+            beginTransaction()
+                .add(R.id.contentContainer, fragment)
+                .addToBackStack("")
+                .commitAllowingStateLoss()
+        }
+    }
+    
+
+
         override fun onViewCreated(view:View,savedInstanceState:Bundle?){
             super.onViewCreated(view,savedInstanceState)
             viewModel.getLiveData().observe(viewLifecycleOwner,{render(it)})
             viewModel.sendMarsRequest(tdby.toString())
+
+            setHasOptionsMenu(true)
 
         }
 

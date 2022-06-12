@@ -8,6 +8,7 @@ import com.sardavisgeekbrains.nasaphotoviewersd.BuildConfig
 import com.sardavisgeekbrains.nasaphotoviewersd.repository.MarsPhotosServerResponseData
 import com.sardavisgeekbrains.nasaphotoviewersd.repository.PictureOfTheDayResponseData
 import com.sardavisgeekbrains.nasaphotoviewersd.repository.PictureOfTheDayRetrofitImpl
+import com.sardavisgeekbrains.nasaphotoviewersd.viewmodel.PictureOfTheDayAppState.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,26 +27,26 @@ class PictureOfTheDayViewModel(
     }
 
     fun sendRequest(date: String) {
-        liveData.postValue(PictureOfTheDayAppState.Loading(null))
+        liveData.postValue(Loading(null))
 
         try {
             pictureOfTheDayRetrofitImpl.getPictureOfTheDay()
                 .getPictureOfTheDay(date, BuildConfig.NASA_API_KEY)
                 .enqueue(callback)
         } catch (e: Throwable) {
-            liveData.postValue(PictureOfTheDayAppState.Error(throw IllegalStateException(API_ERROR)))
+            liveData.postValue(Error(throw IllegalStateException(API_ERROR)))
         }
 
     }
 
     fun sendMarsRequest(date: String) {
-        liveData.postValue(PictureOfTheDayAppState.Loading(null))
+        liveData.postValue(Loading(null))
         try {
             pictureOfTheDayRetrofitImpl.getMarsPictureByDate()
                 .getMarsImageByDate(date, BuildConfig.NASA_API_KEY)
                 .enqueue(marsCallback)
         } catch (e: Throwable) {
-            liveData.postValue(PictureOfTheDayAppState.Error(throw IllegalStateException(API_ERROR)))
+            liveData.postValue(Error(throw IllegalStateException(API_ERROR)))
         }
 
     }
@@ -57,19 +58,19 @@ class PictureOfTheDayViewModel(
             response: Response<PictureOfTheDayResponseData>
         ) {
             if (response.isSuccessful && response.body() != null) {
-                liveData.postValue(PictureOfTheDayAppState.Success(response.body()!!))
+                liveData.postValue(Success(response.body()!!))
             } else {
                 val message = response.message()
                 if (message.isNullOrEmpty()) {
-                    liveData.postValue(PictureOfTheDayAppState.Error(Throwable(UNKNOWN_ERROR)))
+                    liveData.postValue(Error(Throwable(UNKNOWN_ERROR)))
                 } else {
-                    liveData.postValue(PictureOfTheDayAppState.Error(Throwable(message)))
+                    liveData.postValue(Error(Throwable(message)))
                 }
             }
         }
 
         override fun onFailure(call: Call<PictureOfTheDayResponseData>, t: Throwable) {
-            liveData.postValue(PictureOfTheDayAppState.Error(t))
+            liveData.postValue(Error(t))
         }
 
     }
@@ -81,19 +82,19 @@ class PictureOfTheDayViewModel(
             response: Response<MarsPhotosServerResponseData>,
         ) {
             if (response.isSuccessful && response.body() != null) {
-                liveData.postValue(PictureOfTheDayAppState.SuccessMars(response.body()!!))
+                liveData.postValue(SuccessMars(response.body()!!))
             } else {
                 val message = response.message()
                 if (message.isNullOrEmpty()) {
-                    liveData.postValue(PictureOfTheDayAppState.Error(Throwable(UNKNOWN_ERROR)))
+                    liveData.postValue(Error(Throwable(UNKNOWN_ERROR)))
                 } else {
-                    liveData.postValue(PictureOfTheDayAppState.Error(Throwable(message)))
+                    liveData.postValue(Error(Throwable(message)))
                 }
             }
         }
 
         override fun onFailure(call: Call<MarsPhotosServerResponseData>, t: Throwable) {
-            liveData.postValue(PictureOfTheDayAppState.Error(t))
+            liveData.postValue(Error(t))
         }
     }
 

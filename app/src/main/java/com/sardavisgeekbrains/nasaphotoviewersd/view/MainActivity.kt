@@ -14,23 +14,19 @@ class MainActivity : AppCompatActivity() {
     private val KEY_SP = "sp"
     private val KEY_CURRENT_THEME = "current_theme"
 
-    lateinit var navigation: Navigation
+    var navigation = Navigation(supportFragmentManager)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(getRealStyle(getCurrentTheme()))
-        navigation = Navigation(supportFragmentManager)
         setContentView(R.layout.activity_main)
 
         if(savedInstanceState==null){
-            navigation = Navigation(supportFragmentManager)
+
             navigation.showNavigationFragment(NavigationFragment.newInstance())
             navigation.showFragment(PictureOfTheDayFragment.newInstance(), true)
         }
     }
-
-
-
 
 
     fun setCurrentTheme(currentTheme: Int) {
