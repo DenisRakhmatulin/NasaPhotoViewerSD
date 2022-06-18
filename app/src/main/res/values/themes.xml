@@ -36,5 +36,9 @@
         <item name="themeSecondaryColor">@color/blue</item>
     </style>
 
+    <style name="BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="backgroundTint">?colorSecondary</item>
+    </style>
+
     
 </resources>
