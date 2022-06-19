@@ -3,6 +3,8 @@ package com.sardavisgeekbrains.nasaphotoviewersd.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.sardavisgeekbrains.nasaphotoviewersd.R
+import com.sardavisgeekbrains.nasaphotoviewersd.view.navigation.Navigation
+import com.sardavisgeekbrains.nasaphotoviewersd.view.navigation.NavigationFragment
 import com.sardavisgeekbrains.nasaphotoviewersd.view.picture.PictureOfTheDayFragment
 
 const val ThemeOne = 1
@@ -23,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             navigation.showNavigationFragment(NavigationFragment.newInstance())
-            navigation.showFragment(PictureOfTheDayFragment.newInstance(), false)
+            navigation.showFragment(PictureOfTheDayFragment.newInstance(), true)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.sardavisgeekbrains.nasaphotoviewersd.view
+package com.sardavisgeekbrains.nasaphotoviewersd.view.navigation
 
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.sardavisgeekbrains.nasaphotoviewersd.R
 import com.sardavisgeekbrains.nasaphotoviewersd.databinding.FragmentNavigationBinding
+import com.sardavisgeekbrains.nasaphotoviewersd.view.MainActivity
+import com.sardavisgeekbrains.nasaphotoviewersd.view.layout.CoordinatorFragment
 import com.sardavisgeekbrains.nasaphotoviewersd.view.picture.ApiFragment
 import com.sardavisgeekbrains.nasaphotoviewersd.view.picture.PictureOfTheDayFragment
 
@@ -40,9 +42,10 @@ class NavigationFragment : Fragment() {
             when (it.itemId) {
                 R.id.action_earth -> navigation.showFragment(
                     PictureOfTheDayFragment.newInstance(),
-                    false
+                    true
                 )
-                R.id.action_mars -> navigation.showFragment(ApiFragment.newInstance(), false)
+                R.id.action_mars -> navigation.showFragment(ApiFragment.newInstance(), true)
+                R.id.action_animation -> navigation.showFragment(CoordinatorFragment.newInstance(), true)
             }
             true
         }
