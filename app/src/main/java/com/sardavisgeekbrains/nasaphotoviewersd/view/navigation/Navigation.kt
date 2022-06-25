@@ -1,4 +1,4 @@
-package com.sardavisgeekbrains.nasaphotoviewersd.view
+package com.sardavisgeekbrains.nasaphotoviewersd.view.navigation
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
