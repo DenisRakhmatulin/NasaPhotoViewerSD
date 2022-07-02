@@ -4,12 +4,18 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.SpannedString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,8 +29,11 @@ import com.sardavisgeekbrains.nasaphotoviewersd.databinding.FragmentPictureOfThe
 import com.sardavisgeekbrains.nasaphotoviewersd.view.settings.SettingsFragment
 import com.sardavisgeekbrains.nasaphotoviewersd.viewmodel.PictureOfTheDayAppState
 import com.sardavisgeekbrains.nasaphotoviewersd.viewmodel.PictureOfTheDayViewModel
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.concurrent.thread
+
 
 class PictureOfTheDayFragment : Fragment() {
 
@@ -112,8 +121,10 @@ class PictureOfTheDayFragment : Fragment() {
                     BottomSheetBehavior.STATE_EXPANDED -> {}
                     BottomSheetBehavior.STATE_HALF_EXPANDED -> {}
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        if(onImageClicked){BottomSheetBehavior.from(binding.lifeHack.bottomSheetContainer).state =
-                            BottomSheetBehavior.STATE_HIDDEN}else{
+                        if (onImageClicked) {
+                            BottomSheetBehavior.from(binding.lifeHack.bottomSheetContainer).state =
+                                BottomSheetBehavior.STATE_HIDDEN
+                        } else {
                             BottomSheetBehavior.from(binding.lifeHack.bottomSheetContainer).state =
                                 BottomSheetBehavior.STATE_COLLAPSED
                         }
@@ -156,20 +167,20 @@ class PictureOfTheDayFragment : Fragment() {
             val transitionChipSlide = Slide(Gravity.START)
             val transitionFadeWiki = Fade()
             val transitionImageTransform = ChangeImageTransform()
-            transitionImageTransform.duration=1500
-            transitionChipSlide.duration=2000
-            transitionFadeWiki.duration=2500
+            transitionImageTransform.duration = 1500
+            transitionChipSlide.duration = 2000
+            transitionFadeWiki.duration = 2500
 
-            transitionChipSlide.excludeTarget(binding.inputLayout,true)
-            transitionChipSlide.excludeTarget(binding.imageView,true)
-            transitionFadeWiki.excludeTarget(binding.chipGroup,true)
+            transitionChipSlide.excludeTarget(binding.inputLayout, true)
+            transitionChipSlide.excludeTarget(binding.imageView, true)
+            transitionFadeWiki.excludeTarget(binding.chipGroup, true)
 
 
             val transitionSet = TransitionSet()
             transitionSet.addTransition(transitionChipSlide)
             transitionSet.addTransition(transitionImageTransform)
             transitionSet.addTransition(transitionFadeWiki)
-            TransitionManager.beginDelayedTransition(binding.root,transitionSet)
+            TransitionManager.beginDelayedTransition(binding.root, transitionSet)
 
             if (onImageClicked) {
                 binding.chipGroup.visibility = View.GONE
@@ -203,44 +214,146 @@ class PictureOfTheDayFragment : Fragment() {
             binding.imageView.layoutParams = params
 
 
-
         }
 
     }
 
 
-
-
-private fun renderData(pictureOfTheDayAppState: PictureOfTheDayAppState) {
-    when (pictureOfTheDayAppState) {
-        is PictureOfTheDayAppState.Error -> {
-            Snackbar.make(
-                binding.root,
-                pictureOfTheDayAppState.error.toString(),
-                Snackbar.LENGTH_SHORT
-            ).show()
-        }
-        is PictureOfTheDayAppState.Loading -> {}
-        is PictureOfTheDayAppState.Success -> {
-            binding.imageView.load(pictureOfTheDayAppState.pictureOfTheDayResponseData.url) {
-                placeholder(R.drawable.earth)
+    private fun renderData(pictureOfTheDayAppState: PictureOfTheDayAppState) {
+        when (pictureOfTheDayAppState) {
+            is PictureOfTheDayAppState.Error -> {
+                Snackbar.make(
+                    binding.root,
+                    pictureOfTheDayAppState.error.toString(),
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
-            binding.lifeHack.title.text =
-                pictureOfTheDayAppState.pictureOfTheDayResponseData.title
-            binding.lifeHack.explanation.text =
-                pictureOfTheDayAppState.pictureOfTheDayResponseData.explanation
+            is PictureOfTheDayAppState.Loading -> {}
+            is PictureOfTheDayAppState.Success -> {
+                binding.imageView.load(pictureOfTheDayAppState.pictureOfTheDayResponseData.url) {
+                    placeholder(R.drawable.earth)
+                }
+                binding.lifeHack.title.text =
+                    pictureOfTheDayAppState.pictureOfTheDayResponseData.title
+                /*binding.lifeHack.explanation.text =
+                    pictureOfTheDayAppState.pictureOfTheDayResponseData.explanation*/
 
+                val textSpannable = pictureOfTheDayAppState.pictureOfTheDayResponseData.explanation
+                var spannableStringBuilder: SpannableStringBuilder =
+                    SpannableStringBuilder(textSpannable)
+
+                binding.lifeHack.explanation.setText(
+                    spannableStringBuilder,
+                    TextView.BufferType.EDITABLE
+                )
+                spannableStringBuilder = binding.lifeHack.explanation.text as SpannableStringBuilder
+
+                var n = 0
+
+                for (i in 0 until spannableStringBuilder.length) {
+
+
+                    if (n > 6) {
+                        n = 0
+                    }
+
+                    when (n) {
+                        0 -> {
+                            spannableStringBuilder.setSpan(
+                                ForegroundColorSpan(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.red
+                                    )
+                                ),
+                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+                        1 -> {
+                            spannableStringBuilder.setSpan(
+                                ForegroundColorSpan(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.orange
+                                    )
+                                ),
+                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+                        2 -> {
+                            spannableStringBuilder.setSpan(
+                                ForegroundColorSpan(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.yellow
+                                    )
+                                ),
+                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+                        3 -> {
+                            spannableStringBuilder.setSpan(
+                                ForegroundColorSpan(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.green
+                                    )
+                                ),
+                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+                        4 -> {
+                            spannableStringBuilder.setSpan(
+                                ForegroundColorSpan(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.cyan
+                                    )
+                                ),
+                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+                        5 -> {
+                            spannableStringBuilder.setSpan(
+                                ForegroundColorSpan(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.blue
+                                    )
+                                ),
+                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+                        6 -> {
+                            spannableStringBuilder.setSpan(
+                                ForegroundColorSpan(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.violet
+                                    )
+                                ),
+                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+                    }
+
+                    n++
+
+
+                }
+
+
+            }
         }
     }
-}
 
-companion object {
-    @JvmStatic
-    fun newInstance() = PictureOfTheDayFragment()
-}
+    companion object {
+        @JvmStatic
+        fun newInstance() = PictureOfTheDayFragment()
+    }
 
-override fun onDestroy() {
-    _binding = null
-    super.onDestroy()
-}
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
+    }
 }
