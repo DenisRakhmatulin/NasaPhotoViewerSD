@@ -6,10 +6,14 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.transition.*
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
@@ -23,6 +27,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class PictureOfTheDayFragment : Fragment() {
+
+    var onImageClicked = false
 
     private var _binding: FragmentPictureOfTheDayBinding? = null
     private val binding: FragmentPictureOfTheDayBinding
@@ -106,8 +112,12 @@ class PictureOfTheDayFragment : Fragment() {
                     BottomSheetBehavior.STATE_EXPANDED -> {}
                     BottomSheetBehavior.STATE_HALF_EXPANDED -> {}
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        BottomSheetBehavior.from(binding.lifeHack.bottomSheetContainer).state =
-                            BottomSheetBehavior.STATE_COLLAPSED
+                        if(onImageClicked){BottomSheetBehavior.from(binding.lifeHack.bottomSheetContainer).state =
+                            BottomSheetBehavior.STATE_HIDDEN}else{
+                            BottomSheetBehavior.from(binding.lifeHack.bottomSheetContainer).state =
+                                BottomSheetBehavior.STATE_COLLAPSED
+                        }
+
                     }
                     BottomSheetBehavior.STATE_SETTLING -> {}
                 }
@@ -140,39 +150,97 @@ class PictureOfTheDayFragment : Fragment() {
         }
 
 
+        binding.imageView.setOnClickListener {
+            onImageClicked = !onImageClicked
+
+            val transitionChipSlide = Slide(Gravity.START)
+            val transitionFadeWiki = Fade()
+            val transitionImageTransform = ChangeImageTransform()
+            transitionImageTransform.duration=1500
+            transitionChipSlide.duration=2000
+            transitionFadeWiki.duration=2500
+
+            transitionChipSlide.excludeTarget(binding.inputLayout,true)
+            transitionChipSlide.excludeTarget(binding.imageView,true)
+            transitionFadeWiki.excludeTarget(binding.chipGroup,true)
+
+
+            val transitionSet = TransitionSet()
+            transitionSet.addTransition(transitionChipSlide)
+            transitionSet.addTransition(transitionImageTransform)
+            transitionSet.addTransition(transitionFadeWiki)
+            TransitionManager.beginDelayedTransition(binding.root,transitionSet)
+
+            if (onImageClicked) {
+                binding.chipGroup.visibility = View.GONE
+            } else {
+                binding.chipGroup.visibility = View.VISIBLE
+            }
+
+            if (onImageClicked) {
+                binding.inputLayout.visibility = View.GONE
+            } else {
+                binding.inputLayout.visibility = View.VISIBLE
+            }
+
+            if (onImageClicked) {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            } else {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+
+            binding.imageView.scaleType = if (onImageClicked) {
+                ImageView.ScaleType.CENTER_CROP
+            } else {
+                ImageView.ScaleType.CENTER_INSIDE
+            }
+            val params = (binding.imageView.layoutParams as CoordinatorLayout.LayoutParams)
+            params.height = if (onImageClicked) {
+                FrameLayout.LayoutParams.MATCH_PARENT
+            } else {
+                FrameLayout.LayoutParams.WRAP_CONTENT
+            }
+            binding.imageView.layoutParams = params
+
+
+
+        }
+
     }
 
 
-    private fun renderData(pictureOfTheDayAppState: PictureOfTheDayAppState) {
-        when (pictureOfTheDayAppState) {
-            is PictureOfTheDayAppState.Error -> {
-                Snackbar.make(
-                    binding.root,
-                    pictureOfTheDayAppState.error.toString(),
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
-            is PictureOfTheDayAppState.Loading -> {}
-            is PictureOfTheDayAppState.Success -> {
-                binding.imageView.load(pictureOfTheDayAppState.pictureOfTheDayResponseData.url) {
-                    placeholder(R.drawable.earth)
-                }
-                binding.lifeHack.title.text =
-                    pictureOfTheDayAppState.pictureOfTheDayResponseData.title
-                binding.lifeHack.explanation.text =
-                    pictureOfTheDayAppState.pictureOfTheDayResponseData.explanation
 
+
+private fun renderData(pictureOfTheDayAppState: PictureOfTheDayAppState) {
+    when (pictureOfTheDayAppState) {
+        is PictureOfTheDayAppState.Error -> {
+            Snackbar.make(
+                binding.root,
+                pictureOfTheDayAppState.error.toString(),
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
+        is PictureOfTheDayAppState.Loading -> {}
+        is PictureOfTheDayAppState.Success -> {
+            binding.imageView.load(pictureOfTheDayAppState.pictureOfTheDayResponseData.url) {
+                placeholder(R.drawable.earth)
             }
+            binding.lifeHack.title.text =
+                pictureOfTheDayAppState.pictureOfTheDayResponseData.title
+            binding.lifeHack.explanation.text =
+                pictureOfTheDayAppState.pictureOfTheDayResponseData.explanation
+
         }
     }
+}
 
-    companion object {
-        @JvmStatic
-        fun newInstance() = PictureOfTheDayFragment()
-    }
+companion object {
+    @JvmStatic
+    fun newInstance() = PictureOfTheDayFragment()
+}
 
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
-    }
+override fun onDestroy() {
+    _binding = null
+    super.onDestroy()
+}
 }
