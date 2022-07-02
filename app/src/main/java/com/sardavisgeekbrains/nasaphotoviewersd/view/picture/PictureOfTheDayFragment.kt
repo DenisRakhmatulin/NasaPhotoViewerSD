@@ -29,9 +29,10 @@ import com.sardavisgeekbrains.nasaphotoviewersd.databinding.FragmentPictureOfThe
 import com.sardavisgeekbrains.nasaphotoviewersd.view.settings.SettingsFragment
 import com.sardavisgeekbrains.nasaphotoviewersd.viewmodel.PictureOfTheDayAppState
 import com.sardavisgeekbrains.nasaphotoviewersd.viewmodel.PictureOfTheDayViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
 
@@ -235,8 +236,8 @@ class PictureOfTheDayFragment : Fragment() {
                 }
                 binding.lifeHack.title.text =
                     pictureOfTheDayAppState.pictureOfTheDayResponseData.title
-                /*binding.lifeHack.explanation.text =
-                    pictureOfTheDayAppState.pictureOfTheDayResponseData.explanation*/
+                binding.lifeHack.explanation.text =
+                    pictureOfTheDayAppState.pictureOfTheDayResponseData.explanation
 
                 val textSpannable = pictureOfTheDayAppState.pictureOfTheDayResponseData.explanation
                 var spannableStringBuilder: SpannableStringBuilder =
@@ -250,96 +251,100 @@ class PictureOfTheDayFragment : Fragment() {
 
                 var n = 0
 
+
                 for (i in 0 until spannableStringBuilder.length) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        delay(TimeUnit.MILLISECONDS.toMillis(300))
+                        withContext(Dispatchers.Main) {
+
+                            if (n > 6) {
+                                n = 0
+                            }
+
+                            when (n) {
+                                0 -> {
+                                    spannableStringBuilder.setSpan(
+                                        ForegroundColorSpan(
+                                            ContextCompat.getColor(
+                                                requireContext(),
+                                                R.color.red
+                                            )
+                                        ),
+                                        i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                                    )
+                                }
+                                1 -> {
+                                    spannableStringBuilder.setSpan(
+                                        ForegroundColorSpan(
+                                            ContextCompat.getColor(
+                                                requireContext(),
+                                                R.color.orange
+                                            )
+                                        ),
+                                        i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                                    )
+                                }
+                                2 -> {
+                                    spannableStringBuilder.setSpan(
+                                        ForegroundColorSpan(
+                                            ContextCompat.getColor(
+                                                requireContext(),
+                                                R.color.yellow
+                                            )
+                                        ),
+                                        i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                                    )
+                                }
+                                3 -> {
+                                    spannableStringBuilder.setSpan(
+                                        ForegroundColorSpan(
+                                            ContextCompat.getColor(
+                                                requireContext(),
+                                                R.color.green
+                                            )
+                                        ),
+                                        i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                                    )
+                                }
+                                4 -> {
+                                    spannableStringBuilder.setSpan(
+                                        ForegroundColorSpan(
+                                            ContextCompat.getColor(
+                                                requireContext(),
+                                                R.color.cyan
+                                            )
+                                        ),
+                                        i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                                    )
+                                }
+                                5 -> {
+                                    spannableStringBuilder.setSpan(
+                                        ForegroundColorSpan(
+                                            ContextCompat.getColor(
+                                                requireContext(),
+                                                R.color.blue
+                                            )
+                                        ),
+                                        i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                                    )
+                                }
+                                6 -> {
+                                    spannableStringBuilder.setSpan(
+                                        ForegroundColorSpan(
+                                            ContextCompat.getColor(
+                                                requireContext(),
+                                                R.color.violet
+                                            )
+                                        ),
+                                        i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
+                                    )
+                                }
+                            }
+                            n++
 
 
-                    if (n > 6) {
-                        n = 0
+                        }
                     }
-
-                    when (n) {
-                        0 -> {
-                            spannableStringBuilder.setSpan(
-                                ForegroundColorSpan(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.red
-                                    )
-                                ),
-                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
-                        }
-                        1 -> {
-                            spannableStringBuilder.setSpan(
-                                ForegroundColorSpan(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.orange
-                                    )
-                                ),
-                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
-                        }
-                        2 -> {
-                            spannableStringBuilder.setSpan(
-                                ForegroundColorSpan(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.yellow
-                                    )
-                                ),
-                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
-                        }
-                        3 -> {
-                            spannableStringBuilder.setSpan(
-                                ForegroundColorSpan(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.green
-                                    )
-                                ),
-                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
-                        }
-                        4 -> {
-                            spannableStringBuilder.setSpan(
-                                ForegroundColorSpan(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.cyan
-                                    )
-                                ),
-                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
-                        }
-                        5 -> {
-                            spannableStringBuilder.setSpan(
-                                ForegroundColorSpan(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.blue
-                                    )
-                                ),
-                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
-                        }
-                        6 -> {
-                            spannableStringBuilder.setSpan(
-                                ForegroundColorSpan(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.violet
-                                    )
-                                ),
-                                i, i + 1, SpannedString.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
-                        }
-                    }
-
-                    n++
-
-
                 }
 
 
